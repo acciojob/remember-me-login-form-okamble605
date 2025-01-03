@@ -3,7 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+    <title>Login Form</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+        .login-container {
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        .login-container h1 {
+            text-align: center;
+        }
+        .login-container input[type="text"],
+        .login-container input[type="password"] {
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .login-container input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .login-container input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        #existing {
+            margin-top: 10px;
+            width: 100%;
+            padding: 10px;
+            background-color: #008cba;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #existing:hover {
+            background-color: #007bb5;
+        }
+    </style>
 </head>
 <body>
     <div class="login-container">
@@ -19,5 +68,34 @@
         <button id="existing" style="display:none;">Login as existing user</button>
     </div>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const savedUsername = localStorage.getItem('username');
+            const savedPassword = localStorage.getItem('password');
+
+            if (savedUsername && savedPassword) {
+                document.getElementById('existing').style.display = 'block';
+                document.getElementById('existing').addEventListener('click', function() {
+                    alert(`Logged in as ${savedUsername}`);
+                });
+            }
+
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                const rememberMe = document.getElementById('checkbox').checked;
+
+                if (rememberMe) {
+                    localStorage.setItem('username', username);
+                    localStorage.setItem('password', password);
+                } else {
+                    localStorage.removeItem('username');
+                    localStorage.removeItem('password');
+                }
+                alert(`Logged in as ${username}`);
+            });
+        });
+    </script>
 </body>
 </html>
