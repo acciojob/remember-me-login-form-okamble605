@@ -6,96 +6,110 @@
     <title>Login Form</title>
     <style>
         body {
+            font-family: Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
         }
-        .login-container {
-            border: 1px solid #ccc;
+        .container {
+            background: white;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 300px;
-        }
-        .login-container h1 {
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
             text-align: center;
+            border-radius: 10px;
         }
-        .login-container input[type="text"],
-        .login-container input[type="password"] {
+        input {
+            display: block;
             width: 100%;
             margin: 10px 0;
             padding: 10px;
-            box-sizing: border-box;
+            font-size: 16px;
         }
-        .login-container input[type="submit"] {
-            width: 100%;
-            padding: 10px;
-            background-color: #4caf50;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        .login-container input[type="submit"]:hover {
-            background-color: #45a049;
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
         }
         #existing {
+            display: none;
             margin-top: 10px;
-            width: 100%;
             padding: 10px;
-            background-color: #008cba;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007BFF;
             color: white;
             border: none;
-            cursor: pointer;
+            border-radius: 5px;
         }
         #existing:hover {
-            background-color: #007bb5;
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
-    <div class="login-container">
+
+    <div class="container">
         <h1>Login Form</h1>
         <form id="loginForm">
             <input type="text" id="username" placeholder="Username" required>
             <input type="password" id="password" placeholder="Password" required>
-            <label>
-                <input type="checkbox" id="checkbox"> Remember me
-            </label>
+            
+            <div class="checkbox-container">
+                <input type="checkbox" id="checkbox">
+                <label for="checkbox">Remember me</label>
+            </div>
+            
             <input type="submit" id="submit" value="Submit">
         </form>
-        <button id="existing" style="display:none;">Login as existing user</button>
+
+        <!-- Existing user login button -->
+        <button id="existing">Login as existing user</button>
     </div>
 
     <script>
+        // Check if user details exist in local storage
         document.addEventListener("DOMContentLoaded", function() {
-            const savedUsername = localStorage.getItem('username');
-            const savedPassword = localStorage.getItem('password');
+            const savedUsername = localStorage.getItem("username");
+            const savedPassword = localStorage.getItem("password");
 
             if (savedUsername && savedPassword) {
-                document.getElementById('existing').style.display = 'block';
-                document.getElementById('existing').addEventListener('click', function() {
-                    alert(`Logged in as ${savedUsername}`);
-                });
+                document.getElementById("existing").style.display = "block";
+            }
+        });
+
+        // Handle form submission
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent form refresh
+            
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+            const rememberMe = document.getElementById("checkbox").checked;
+
+            if (rememberMe) {
+                localStorage.setItem("username", username);
+                localStorage.setItem("password", password);
+            } else {
+                localStorage.removeItem("username");
+                localStorage.removeItem("password");
             }
 
-            document.getElementById('loginForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                const username = document.getElementById('username').value;
-                const password = document.getElementById('password').value;
-                const rememberMe = document.getElementById('checkbox').checked;
+            alert(`Logged in as ${username}`);
 
-                if (rememberMe) {
-                    localStorage.setItem('username', username);
-                    localStorage.setItem('password', password);
-                } else {
-                    localStorage.removeItem('username');
-                    localStorage.removeItem('password');
-                }
-                alert(`Logged in as ${username}`);
-            });
+            // Show the "Login as existing user" button if details are stored
+            if (localStorage.getItem("username") && localStorage.getItem("password")) {
+                document.getElementById("existing").style.display = "block";
+            }
+        });
+
+        // Handle existing user login
+        document.getElementById("existing").addEventListener("click", function() {
+            const savedUsername = localStorage.getItem("username");
+            alert(`Logged in as ${savedUsername}`);
         });
     </script>
+
 </body>
 </html>
